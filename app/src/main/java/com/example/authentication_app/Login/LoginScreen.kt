@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.authentication_app.repository.AuthRepository
 
 @Composable
 fun LoginScreen(
@@ -63,7 +64,9 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(Modifier.padding(top = 16.dp))
-            LoginButton()
+            LoginButton(
+                email ,password
+            )
         }
 
     }
@@ -155,9 +158,13 @@ fun PasswordField(
 
 @Composable
 fun LoginButton(
+    email: String,
+    password: String,
     modifier: Modifier = Modifier,
 ){
-    Button(onClick = {},
+    Button(onClick = {
+
+    },
         enabled = true,
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier.fillMaxWidth()
