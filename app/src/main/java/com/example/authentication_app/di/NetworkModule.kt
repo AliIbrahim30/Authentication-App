@@ -1,11 +1,14 @@
 package com.example.authentication_app.di
 
+import android.content.Context
 import com.example.authentication_app.data.remote.ApiService
 import com.example.authentication_app.data.remote.AuthInterceptor
+import com.example.authentication_app.data.remote.datastore.DataStoreManager
 import com.example.authentication_app.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -41,6 +44,12 @@ object NetworkModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDataStoreManger(@ApplicationContext context: Context ): DataStoreManager{
+        return DataStoreManager(context)
     }
 
 }
