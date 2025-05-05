@@ -1,4 +1,4 @@
-package com.example.authentication_app.Login
+package com.example.authentication_app.login
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -35,4 +35,11 @@ class LoginViewModel @Inject constructor(
     }
 
     val token: LiveData<String?> = dataStore.getToken.asLiveData()
+
+    fun logOut (onLoggedOut:()->Unit){
+        viewModelScope.launch {
+            dataStore.clearToken()
+                onLoggedOut()
+        }
+    }
 }

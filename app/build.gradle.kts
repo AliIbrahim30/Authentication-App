@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.hilt)
     kotlin("kapt")
 }
-
 android {
     namespace = "com.example.authentication_app"
     compileSdk = 35
@@ -20,6 +19,8 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -32,6 +33,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+    hilt {
+        enableAggregatingTask = false
     }
     kotlinOptions {
         jvmTarget = "11"
@@ -76,5 +80,9 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.okhttp.logging)
     implementation(libs.datastore.preferences)
+    //LiveData
+    implementation(libs.compose.runtime.livedata)
 
+    annotationProcessor("com.squareup:javapoet:1.13.0")
+    kapt("com.squareup:javapoet:1.13.0") // إذا كنت تستخدم kapt
 }

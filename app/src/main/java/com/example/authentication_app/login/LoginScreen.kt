@@ -1,4 +1,4 @@
-package com.example.authentication_app.Login
+package com.example.authentication_app.login
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,8 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.CircularProgressIndicator
+
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,8 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+//import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -34,13 +37,16 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.authentication_app.repository.AuthRepository
+import com.example.authentication_app.util.Resource
 
 @Composable
 fun LoginScreen(
-    navController: NavController) {
-
+    navController: NavController,
+    viewModel: LoginViewModel = hiltViewModel()
+    ) {
+   val state by viewModel.loginState.observeAsState()
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -65,8 +71,23 @@ fun LoginScreen(
             )
             Spacer(Modifier.padding(top = 16.dp))
             LoginButton(
-                email ,password
+               email =  email , password = password, viewModel = viewModel
             )
+
+            when (state) {
+                is Resource.Loading ->{   CircularProgressIndicator()
+                println("Ali CircularProgressIndicator()")
+                }
+                is Resource.Success -> {
+                    Text("تم الدخول ✅")
+                    println("Ali success")
+                }
+                is Resource.Error -> {
+                    Text("خطأ: ${(state as Resource.Error).message}")
+                    println("Ali ${(state as Resource.Error).message}")
+                }
+                null -> {}
+            }
         }
 
     }
@@ -161,8 +182,12 @@ fun LoginButton(
     email: String,
     password: String,
     modifier: Modifier = Modifier,
+    viewModel: LoginViewModel,
+   // state : Resource<String>?
 ){
     Button(onClick = {
+        viewModel.login(email,password)
+
 
     },
         enabled = true,
